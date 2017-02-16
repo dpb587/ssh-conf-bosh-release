@@ -1,0 +1,21 @@
+---
+name: sshd_settings
+templates:
+  bin/pre-start: bin/pre-start
+  etc/trusted_ca: etc/trusted_ca
+properties:
+  authorized_principals:
+    default: {}
+    description: "A hash of username (string) => principals ([]string) for restricting trusted CA-based access."
+  disable_authorized_keys:
+    default: false
+    description: "If true, disables user-specific authorized_keys files (requiring all SSH connections to be using signed public keys; this breaks `bosh ssh`!)."
+  disable_password_authentication:
+    default: false
+    description: "If true, disables password authentication (requiring all SSH connections to be public key-based)."
+  log_level:
+    default: INFO
+    description: "Set the log level for sshd (DEBUG, INFO, ERROR)."
+  trusted_ca:
+    default: ~
+    description: "Trust user keys signed with this OpenSSH public key."
