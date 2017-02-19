@@ -89,7 +89,15 @@ fi
 #
 
 <% if p('trusted_ca') %>
-  expected="TrustedUserCAKeys /var/vcap/jobs/sshd_settings/etc/trusted_ca"
+  trusted_ca=/var/vcap/jobs/sshd_settings/etc/trusted_ca
+
+  if grep -q -- "-----BEGIN CERTIFICATE-----" $trusted_ca ; then
+    chmod 0644 $trusted_ca
+    ssh-keygen -i -m PKCS8 -f <( openssl x509 -in $trusted_ca -noout -pubkey ) > $trusted_ca-cert.pub
+    trusted_ca=$trusted_ca-cert.pub
+  fi
+
+  expected="TrustedUserCAKeys $trusted_ca"
 <% else %>
   expected="#TrustedUserCAKeys /dev/null"
 <% end %>

@@ -15,7 +15,7 @@ properties:
     description: "If true, disables password authentication (requiring all SSH connections to be public key-based)."
   log_level:
     default: INFO
-    description: "Set the log level for sshd (DEBUG, INFO, ERROR)."
+    description: "Set the log level for sshd (QUIET, FATAL, ERROR, INFO, VERBOSE, DEBUG, DEBUG1, DEBUG2, and DEBUG3)."
   trusted_ca:
     default: ~
-    description: "Trust user keys signed with this OpenSSH public key."
+    description: "Trust user keys signed with this OpenSSH or PEM-formatted certificate."
