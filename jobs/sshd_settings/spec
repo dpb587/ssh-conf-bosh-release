@@ -13,6 +13,15 @@ properties:
   disable_password_authentication:
     default: false
     description: "If true, disables password authentication (requiring all SSH connections to be public key-based)."
+  disable_print_last_log:
+    default: true
+    description: "If true, do not print information about recent logins."
+  host_key.rsa:
+    description: "Set the RSA host key of the server (this breaks `bosh ssh`)."
+  host_key.dsa:
+    description: "Set the DSA host key of the server (this breaks `bosh ssh`)."
+  host_key.ecdsa:
+    description: "Set the ECDSA host key of the server (this breaks `bosh ssh`)."
   log_level:
     default: INFO
     description: "Set the log level for sshd (QUIET, FATAL, ERROR, INFO, VERBOSE, DEBUG, DEBUG1, DEBUG2, and DEBUG3)."

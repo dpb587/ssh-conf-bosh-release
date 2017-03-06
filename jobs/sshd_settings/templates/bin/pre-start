@@ -70,6 +70,21 @@ fi
 
 
 #
+# disable_print_last_log
+#
+
+expected="PrintLastLog <%= p('disable_password_authentication') ? 'no' : 'yes' %>"
+
+if ! grep -q "$expected" "$sshd_config"; then
+  echo "overwriting PrintLastLog"
+  changed=true
+
+  sed -Ei '/^#?PrintLastLog /d' "$sshd_config"
+  echo "$expected" >> "$sshd_config"
+fi
+
+
+#
 # log_level
 #
 
@@ -109,6 +124,31 @@ if ! grep -q "$expected" "$sshd_config"; then
   sed -Ei '/^#?TrustedUserCAKeys /d' "$sshd_config"
   echo "$expected" >> "$sshd_config"
 fi
+
+
+#
+# host keys
+#
+
+<% ['rsa', 'dsa', 'ecdsa'].each do |algorithm| if_p("host_key.#{algorithm}") do |key| %>
+  <% if key == '' %>
+    expected="#HostKey /etc/ssh/ssh_host_<%= algorithm %>_key"
+    rm -f /etc/ssh/ssh_host_<%= algorithm %>_key
+  <% else %>
+    expected="HostKey /etc/ssh/ssh_host_<%= algorithm %>_key # ssh-conf"
+    cat > /etc/ssh/ssh_host_<%= algorithm %>_key <<EOF
+<%= key %>
+EOF
+  <% end %>
+
+  if ! grep -q "$expected" "$sshd_config"; then
+    echo "overwriting HostKey <%= algorithm %>"
+    changed=true
+
+    sed -Ei '\@^#?HostKey /etc/ssh/ssh_host_<%= algorithm %>_key@d' "$sshd_config"
+    echo "$expected" >> "$sshd_config"
+  fi
+<% end ; end %>
 
 
 #
