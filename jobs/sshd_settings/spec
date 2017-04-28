@@ -7,6 +7,10 @@ properties:
   authorized_principals:
     default: {}
     description: "A hash of username (string) => principals ([]string) for restricting trusted CA-based access."
+    example:
+      audit: [audit@prod, security@prod, security@ALL]
+      security: [security@prod, security@ALL]
+      root: [root@prod]
   disable_authorized_keys:
     default: false
     description: "If true, disables user-specific authorized_keys files (requiring all SSH connections to be using signed public keys; this breaks `bosh ssh`!)."
@@ -18,8 +22,6 @@ properties:
     description: "If true, do not print information about recent logins."
   host_key.rsa:
     description: "Set the RSA host key of the server (this breaks `bosh ssh`)."
-  host_key.dsa:
-    description: "Set the DSA host key of the server (this breaks `bosh ssh`)."
   host_key.ecdsa:
     description: "Set the ECDSA host key of the server (this breaks `bosh ssh`)."
   log_level:
